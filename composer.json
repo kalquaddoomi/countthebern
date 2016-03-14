@@ -1,0 +1,11 @@
+{
+  "name": "kalquaddoomi/count-the-bern",
+  "description": "Democratic Primaries Counter and Display",
+  "license": "MIT",
+  "require": {
+    "predis/predis":"1.*",
+    "joshcam/mysqli-database-class": "dev-master",
+    "sunra/php-simple-html-dom-parser": "v1.5.0",
+    "twbs/bootstrap": "^3.3"
+  }
+}
