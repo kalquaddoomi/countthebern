@@ -21,6 +21,12 @@ foreach($us_states as $stateAb => $stateName) {
     $greenCrawl = "http://www.thegreenpapers.com/P16/$stateAb-D";
     $greenDom = \Sunra\PhpSimple\HtmlDomParser::file_get_html($greenCrawl);
     echo "Reading State: " . $stateName . "\n";
+    $when = $greenDom->getElementById("evtmaj");
+    $dateWhen = explode(':', $when->innertext);
+    $dateWhen = explode('&nbsp;', $dateWhen[1]);
+    $date = $dateWhen[3]." ".$dateWhen[2]." ".substr($dateWhen[4], 0, 4);
+    $electDate = date('Y-m-d', strtotime($date));
+
     $tables = $greenDom->find("table");
     $footer = $greenDom->find("td[id=foot]", 0);
     if ($footer) {
@@ -38,7 +44,7 @@ foreach($us_states as $stateAb => $stateName) {
             $ccells = $tDom->find("td[id=tdnn]");
             $tcells = $tDom->find("td[id=tddb]");
 
-
+            $infoProp = trim(preg_replace('/\s+/', ' ', $info->plaintext));
             foreach ($ccells as $CandidateCell) {
                 $recordRow = $CandidateCell->parent();
                 $dataCells = $recordRow->children();
@@ -58,8 +64,9 @@ foreach($us_states as $stateAb => $stateName) {
             }
         }
     }
-    $voteType[$stateAb] = $info->plaintext;;
+    $voteType[$stateAb] = $infoProp;
     $electType[$stateAb] = $keyA->plaintext;
+    $electDates[$stateAb] = $electDate;
 }
 
 
@@ -78,8 +85,10 @@ foreach($outCandidates as $state=>$theCandidates) {
         'total_delegates'=>(is_numeric($sitem[3]) ? $sitem[3] : 0),
         'election_type'=>$stateElectInfo[1],
         'election_eligible'=>$stateElectInfo[0],
+        'primary_date'=>$electDates[$state],
         'statename'=>$us_states[$state],
         'vote_count_Type'=>$voteType[$state]
+
     );
     if($currState['id']) {
      //   echo "Updating existing state: ".$currState['id']."\n";

@@ -66,6 +66,51 @@ $pledged_to_date = $selected_delegates[0]['sum(pledged)'];
 $hrcTotals = getData(1);
 $bsTotals = getData(2);
 
+foreach($regions as $r) {
+    $aWins = array();
+    $tWins = 0;
+    $hrcr[] = getData(1, null, null, $r);
+    $bsr[] = getData(2, null, null, $r);
+    $avr[] = getData(6, null, null, $r);
+    $rwins[] = getRegionalWins($r);
+    $aWins = getRegionalWins($r);
+    $tWins = $aWins[1]+$aWins[2];
+    $vic[$r] = $tWins;
+}
+
+foreach($electType as $eT) {
+    foreach($vType as $vT) {
+        $hrc[] = getData(1, $vT, $eT);
+        $bs[] = getData(2, $vT, $eT);
+        $av[] = getData(6, $vT, $eT);
+    }
+}
+
+$rCounter = 0;
+$endTotal = array("Bernie"=>0, "Hill"=>0);
+foreach($regions as $r) {
+    $hill = $hrcr[$rCounter]['sum(v.pledged)'];
+    $bernie = $bsr[$rCounter]['sum(v.pledged)'];
+    $total = $hill+$bernie;
+    $hillShare = $hill / $total;
+    $bernieShare = $bernie / $total;
+    $remain = $avr[$rCounter]['sum(v.pledged)'];
+    $predict[$r]['BernShare'] = $bernieShare;
+    $predict[$r]['HillShare'] = $hillShare;
+    $predict[$r]['available'] = $remain;
+    $predict[$r]['Bernie'] = $remain * $bernieShare;
+    $predict[$r]['Hill'] = $remain * $hillShare;
+    $endTotal['Bernie'] += $remain * $bernieShare;
+    $endTotal['Hill'] += $remain * $hillShare;
+    $rCounter++;
+}
+
+$db->where('candidate_id', 1);
+$db->orWhere('candidate_id', 2);
+$db->orWhere('candidate_id', 6);
+$db->orderBy('state', 'asc');
+$db->orderBy('candidate_id', 'asc');
+$byStateResults = $db->get('candidate_state_results');
 ?>
 <html>
 <head>
@@ -225,7 +270,6 @@ $bsTotals = getData(2);
                 raceChart.render();
             });
     </script>
-    </script>
 
 </head>
 <body>
@@ -252,7 +296,56 @@ $bsTotals = getData(2);
     </p>
     </div>
 
+    <div class="col-lg-12">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <?php foreach($regions as $reg) {
+                        echo "<th colspan=3>$reg</th>";
+                    } ?>
+                </tr>
+                <tr>
+                    <th>Candidate</th>
+                    <?php foreach($regions as $reg) {
+                        echo "<th>Left</th>";
+                        echo "<th>Average Win %</th>";
+                        echo "<th>Predict To Win</th>";
 
+                    } ?>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sanders, Bernard "Bernie"</td>
+                    <?php foreach($regions as $reg) {
+                        echo "<td>".$predict[$reg]['available']."</td>";
+                        echo "<td>".round($predict[$reg]['BernShare'], 4)."</td>";
+                        echo "<td>".round($predict[$reg]['Bernie'], 3)."</td>";
+                    }?>
+                </tr>
+                <tr>
+                    <td>Clinton, Hillary Rodham</td>
+                    <?php foreach($regions as $reg) {
+                        echo "<td>".$predict[$reg]['available']."</td>";
+                        echo "<td>".round($predict[$reg]['HillShare'], 4)."</td>";
+                        echo "<td>".round($predict[$reg]['Hill'], 3)."</td>";
+                    }?>
+                </tr>
+             </tbody>
+        </table>
+        <h5>End Results</h5>
+        <p>Bernie Sanders : Predicted
+            <?php echo round($endTotal['Bernie'], 3) ?>
+            + Current  <?php echo $bsTotals['sum(v.pledged)']; ?>
+            = <?php echo (round($endTotal['Bernie'], 3)+$bsTotals['sum(v.pledged)']); ?></p>
+        <p>Hillary Clinton : Predicted
+            <?php echo round($endTotal['Hill'], 3) ?>
+            + Current <?php echo $hrcTotals['sum(v.pledged)']; ?>
+            = <?php echo (round($endTotal['Hill'], 3)+$hrcTotals['sum(v.pledged)']); ?> </p>
+    </div>
+
+    <div class="col-lg-12">
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
@@ -276,14 +369,6 @@ $bsTotals = getData(2);
             </thead>
             <tbody>
             <?php
-                foreach($electType as $eT) {
-                    foreach($vType as $vT) {
-                        $hrc[] = getData(1, $vT, $eT);
-                        $bs[] = getData(2, $vT, $eT);
-                        $av[] = getData(6, $vT, $eT);
-                    }
-                }
-
                 echo "<tr>\n";
                 echo "<td>Clinton, Hillary Rodham</td>";
                 echo "<td>Pledged (Voted) Delegates</td>";
@@ -319,21 +404,9 @@ $bsTotals = getData(2);
         </table>
     </div>
 
-    <div class="col-lg-12">
-        <?php
-                foreach($regions as $r) {
-                    $aWins = array();
-                    $tWins = 0;
-                    $hrcr[] = getData(1, null, null, $r);
-                    $bsr[] = getData(2, null, null, $r);
-                    $avr[] = getData(6, null, null, $r);
-                    $rwins[] = getRegionalWins($r);
-                    $aWins = getRegionalWins($r);
-                    $tWins = $aWins[1]+$aWins[2];
-                    $vic[$r] = $tWins;
-                }
 
-        ?>
+    <div class="col-lg-12">
+
         <table class="table table-bordered">
             <thead>
                 <tr>
