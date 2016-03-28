@@ -7,7 +7,7 @@
  */
 
 include "states.php";
-require "vendor/autoload.php";
+require "./vendor/autoload.php";
 error_reporting(E_ERROR);
 
 $db = new MysqliDb('localhost', "a", "a", 'countthebern');
@@ -50,17 +50,20 @@ foreach($us_states as $stateAb => $stateName) {
                 $dataCells = $recordRow->children();
                 array_shift($dataCells);
                 foreach ($dataCells as $aData) {
-                    $dataReport = html_entity_decode(htmlspecialchars_decode($aData->plaintext));
-                    $dataBits = preg_split("/[\s]+/", $dataReport);
-                    $outCandidates[$stateAb][$CandidateCell->plaintext][] = str_replace(',', '', (substr(trim($dataBits[0]), 0, -1)));
+		    //die(var_dump($aData->plaintext));
+                    //$dataReport = html_entity_decode(htmlspecialchars_decode($aData->plaintext));
+                    //$dataBits = preg_split("@[\s+　]@u", $dataReport);
+		    $dataBits = explode("&nbsp;", $aData->plaintext);
+		    //die(var_dump($dataBits));
+                    $outCandidates[$stateAb][$CandidateCell->plaintext][] = str_replace(',', '', trim($dataBits[0]));
                 }
-
             }
 
             for ($i = 0; $i < 5; $i++) {
-                $totalReport = html_entity_decode(htmlspecialchars_decode($tcells[$i]->plaintext));
-                $totalBits = preg_split("/[\s]+/", $totalReport);
-                $stateTotals[$stateAb][$i] = str_replace(',', '', (substr(trim($totalBits[0]), 0, -1)));;
+                //$totalReport = html_entity_decode(htmlspecialchars_decode($tcells[$i]->plaintext));
+                //$totalBits = preg_split("@[\s+　]@u", $totalReport);
+		$totalBits = explode("&nbsp;", $tcells[$i]->plaintext);
+                $stateTotals[$stateAb][$i] = str_replace(',', '', trim($totalBits[0]));
             }
         }
     }
@@ -69,6 +72,7 @@ foreach($us_states as $stateAb => $stateName) {
     $electDates[$stateAb] = $electDate;
 }
 
+//die(var_dump($outCandidates));
 
 foreach($outCandidates as $state=>$theCandidates) {
     echo "Processing State: ".$state."\n";
@@ -113,13 +117,19 @@ foreach($outCandidates as $state=>$theCandidates) {
         }
 
         $cId = $candidate['id'];
-
+	/*
+	$itemIn = array();
+        foreach($item as $aItem) {
+ 	    $dataBits = explode("  ", $aItem);
+	    $itemIn[] = $dataBits[0];
+	}	
+	*/
         $candidateStateData = array(
             'state' => $state,
             'candidate_id' => $cId,
             'votes' => (is_numeric($item[0]) ? $item[0] : 0),
             'pledged' => (is_numeric($item[1]) ? $item[1] : 0),
-            'unpledged' => (is_numeric($item[2]) ? $item[2] : 0)
+            'unpledged' => (is_numeric($itemIn[2]) ? $itemIn[2] : 0)
         );
         $db->where('state', $state);
         $db->where('candidate_id', $cId);
