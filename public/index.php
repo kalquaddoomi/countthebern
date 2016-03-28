@@ -279,6 +279,17 @@ $byStateResults = $db->get('candidate_state_results');
     <h4>The numbers behind Bernie Sanders nomination</h4>
     <h6>Source: http://www.thegreenpapers.com</h6>
     </div>
+    <div class="col-lg-12 center" style="padding-bottom:10px; border-bottom:1px solid black; font-size:16px; font-weight:bold;">
+        <h5>End Results</h5>
+        <span class="col-lg-6"><p>Bernie Sanders :</p> (Predicted)
+            <?php echo round($endTotal['Bernie'], 3) ?>
+            + (Current)  <?php echo $bsTotals['sum(v.pledged)']; ?>
+            = <?php echo (round($endTotal['Bernie'], 3)+$bsTotals['sum(v.pledged)']); ?></span>
+        <span class="col-lg-6"><p>Hillary Clinton :</p> (Predicted)
+            <?php echo round($endTotal['Hill'], 3) ?>
+            + (Current) <?php echo $hrcTotals['sum(v.pledged)']; ?>
+            = <?php echo (round($endTotal['Hill'], 3)+$hrcTotals['sum(v.pledged)']); ?> </span>
+    </div>
     <div class="main col-lg-12">
 
     <div class="col-lg-4">
@@ -296,54 +307,6 @@ $byStateResults = $db->get('candidate_state_results');
     </p>
     </div>
 
-    <div class="col-lg-12">
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th></th>
-                    <?php foreach($regions as $reg) {
-                        echo "<th colspan=3>$reg</th>";
-                    } ?>
-                </tr>
-                <tr>
-                    <th>Candidate</th>
-                    <?php foreach($regions as $reg) {
-                        echo "<th>Left</th>";
-                        echo "<th>Average Win %</th>";
-                        echo "<th>Predict To Win</th>";
-
-                    } ?>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Sanders, Bernard "Bernie"</td>
-                    <?php foreach($regions as $reg) {
-                        echo "<td>".$predict[$reg]['available']."</td>";
-                        echo "<td>".round($predict[$reg]['BernShare'], 4)."</td>";
-                        echo "<td>".round($predict[$reg]['Bernie'], 3)."</td>";
-                    }?>
-                </tr>
-                <tr>
-                    <td>Clinton, Hillary Rodham</td>
-                    <?php foreach($regions as $reg) {
-                        echo "<td>".$predict[$reg]['available']."</td>";
-                        echo "<td>".round($predict[$reg]['HillShare'], 4)."</td>";
-                        echo "<td>".round($predict[$reg]['Hill'], 3)."</td>";
-                    }?>
-                </tr>
-             </tbody>
-        </table>
-        <h5>End Results</h5>
-        <p>Bernie Sanders : Predicted
-            <?php echo round($endTotal['Bernie'], 3) ?>
-            + Current  <?php echo $bsTotals['sum(v.pledged)']; ?>
-            = <?php echo (round($endTotal['Bernie'], 3)+$bsTotals['sum(v.pledged)']); ?></p>
-        <p>Hillary Clinton : Predicted
-            <?php echo round($endTotal['Hill'], 3) ?>
-            + Current <?php echo $hrcTotals['sum(v.pledged)']; ?>
-            = <?php echo (round($endTotal['Hill'], 3)+$hrcTotals['sum(v.pledged)']); ?> </p>
-    </div>
 
     <div class="col-lg-12">
         <table class="table table-striped table-bordered">
@@ -501,9 +464,49 @@ $byStateResults = $db->get('candidate_state_results');
         </table>
 
     </div>
+        <div class="col-lg-12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th></th>
+                    <?php foreach($regions as $reg) {
+                        echo "<th colspan=3>$reg</th>";
+                    } ?>
+                </tr>
+                <tr>
+                    <th>Candidate</th>
+                    <?php foreach($regions as $reg) {
+                        echo "<th>Left</th>";
+                        echo "<th>Average Win %</th>";
+                        echo "<th>Predict To Win</th>";
+
+                    } ?>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Sanders, Bernard "Bernie"</td>
+                    <?php foreach($regions as $reg) {
+                        echo "<td>".$predict[$reg]['available']."</td>";
+                        echo "<td>".round($predict[$reg]['BernShare'], 4)."</td>";
+                        echo "<td>".round($predict[$reg]['Bernie'], 3)."</td>";
+                    }?>
+                </tr>
+                <tr>
+                    <td>Clinton, Hillary Rodham</td>
+                    <?php foreach($regions as $reg) {
+                        echo "<td>".$predict[$reg]['available']."</td>";
+                        echo "<td>".round($predict[$reg]['HillShare'], 4)."</td>";
+                        echo "<td>".round($predict[$reg]['Hill'], 3)."</td>";
+                    }?>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
 
 
-
+</div>
 
 
 </body>
