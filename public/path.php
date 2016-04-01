@@ -78,6 +78,16 @@ $byStateResults['all'] = $db->get('states');
                     <th>Clinton</th>
                     <th>Sanders</th>
                 </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th><input type='textbox' id='hrc-per-global' class='global' value='0' /></th>
+                    <th><input type='textbox' id='bs-per-global' class='global' value='0' /></th>
+                    <th></th>
+                    <th></th>
+
+                </tr>
             </thead>
             <tbody>
                 <?php foreach($byStateResults['all'] as $stateCheck) {
@@ -162,6 +172,7 @@ $byStateResults['all'] = $db->get('states');
                 "lowerLimit": "0",
                 "upperLimit": "2383",
                 "lowerLimitDisplay": "0",
+                "numberSuffix": " Delegates",
                 "upperLimitDisplay": "Wins Conventions!"
 
             },
@@ -192,6 +203,7 @@ $byStateResults['all'] = $db->get('states');
                 "lowerLimit": "0",
                 "upperLimit": "2383",
                 "lowerLimitDisplay": "0",
+                "numberSuffix": " Delegates",
                 "upperLimitDisplay": "Wins Conventions!"
 
             },
@@ -254,8 +266,16 @@ $byStateResults['all'] = $db->get('states');
             $('.bs-dels').each(function(key, value) {
                 bsCurAdd += Number(value.innerText);
             });
-            delsHRCFuel.setData(orgHrc+hrcCurAdd);
-            delsBSFuel.setData(orgBs+bsCurAdd);
+            var sumHrc = orgHrc+hrcCurAdd;
+            var sumBS = orgBs+bsCurAdd
+            if(sumHrc> 2383) {
+                sumHrc = 2383;
+            }
+            if(sumBS > 2383) {
+                sumBS = 2383;
+            }
+            delsHRCFuel.setData(sumHrc);
+            delsBSFuel.setData(sumBS);
             return;
         };
 
@@ -280,8 +300,25 @@ $byStateResults['all'] = $db->get('states');
             }
             var stateId = this.id.split('-')[2];
             $('input#hrc-per-'+stateId).val(100 - this.value);
-            var shares = delegateLogic(stateId, $('input#bs-per-'+stateId).val(), this.value);
+            var shares = delegateLogic(stateId, $('input#hrc-per-'+stateId).val(), this.value);
         })
+
+        $('#bs-per-global').change(function(){
+            if(this.value > 100) {
+                this.value = 100;
+            }
+            if(this.value < 0) {
+                this.value = 0;
+            }
+            $('#hrc-per-global').val(100 - this.value);
+            var _this = this;
+            $('.bs-per').each(function(ind, item) {
+                item.value = _this.value;
+                var stId = item.id.split('-')[2];
+                $('input#hrc-per-'+stId).val(100 - _this.value);
+                var shares = delegateLogic(stId, $('input#hrc-per-'+stId).val(), _this.value);
+            })
+        });
 
     </script>
 </body>
