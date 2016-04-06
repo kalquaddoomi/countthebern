@@ -79,6 +79,9 @@ foreach($outCandidates as $state=>$theCandidates) {
     $db->where('state_abbr', $state);
     $currState = $db->getOne('states');
 
+    if($state == 'DA') {
+        $electDataes[$state] = '2016-03-21';
+    }
     $stateElectInfo = explode(" ", $electType[$state]);
     $sitem = $stateTotals[$state];
     $stateMake = array(
