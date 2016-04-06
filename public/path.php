@@ -59,55 +59,7 @@ $byStateResults['all'] = $db->get('states');
     <div class="col-lg-12">
         <button type="button" id="bernieup">Bernie Up!</button>
     </div>
-    <div class="col-lg-12">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th colspan="2">Percentage</th>
-                    <th colspan="2">Delegates</th>
-                </tr>
-                <tr>
-                    <th>State</th>
-                    <th>Election</th>
-                    <th>Delegates Left</th>
-                    <th>Clinton</th>
-                    <th>Sanders</th>
-                    <th>Clinton</th>
-                    <th>Sanders</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th><input type='textbox' id='hrc-per-global' class='global' value='0' /></th>
-                    <th><input type='textbox' id='bs-per-global' class='global' value='0' /></th>
-                    <th></th>
-                    <th></th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($byStateResults['all'] as $stateCheck) {
-                    $stateId = $stateCheck['state_abbr'];
-                    if($byStateResults['avail'][$stateId][1] > 0) {
-                        echo "<tr>\n";
-                        echo "<td>" . $stateId . "</td>";
-                        echo "<td>" . $stateCheck['primary_date'] . "</td>";
-                        echo "<td id='$stateId-avail'>" . ($byStateResults['avail'][$stateId][1] ?: 0) . "</td>";
-                        echo "<td id='$stateId-per-hrc'><input type='textbox' id='hrc-per-$stateId' class='hrc-per' value='0' /></td>";
-                        echo "<td id='$stateId-per-bs'><input type='textbox' id='bs-per-$stateId' class='bs-per' value='0' /></td>";
-                        echo "<td class='hrc-dels' id='$stateId-del-hrc'>0</td>";
-                        echo "<td class='bs-dels' id='$stateId-del-bs'>0</td>";
-                        echo "</tr>\n";
-                    }
-                }
-                ?>
-            </tbody>
-        </table>
-    </div>
+    <h4>How we got to where we are</h4>
     <div class="col-lg-12">
         <table class="table table-bordered">
             <thead>
@@ -156,6 +108,56 @@ $byStateResults['all'] = $db->get('states');
                         $glColor = 'red';
                     }
                     echo "<td style='font-weight:bold; color:".$glColor."'>$newDiff <span >($gainLoss)</span></td>";
+                    echo "</tr>\n";
+                }
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
+    <h3>And Predicting the Future</h3>
+    <div class="col-lg-12">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="2">Percentage</th>
+                <th colspan="2">Delegates</th>
+            </tr>
+            <tr>
+                <th>State</th>
+                <th>Election</th>
+                <th>Delegates Left</th>
+                <th>Clinton</th>
+                <th>Sanders</th>
+                <th>Clinton</th>
+                <th>Sanders</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th><input type='textbox' id='hrc-per-global' class='global' value='0' /></th>
+                <th><input type='textbox' id='bs-per-global' class='global' value='0' /></th>
+                <th></th>
+                <th></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach($byStateResults['all'] as $stateCheck) {
+                $stateId = $stateCheck['state_abbr'];
+                if($byStateResults['avail'][$stateId][1] > 0) {
+                    echo "<tr>\n";
+                    echo "<td>" . $stateId . "</td>";
+                    echo "<td>" . $stateCheck['primary_date'] . "</td>";
+                    echo "<td id='$stateId-avail'>" . ($byStateResults['avail'][$stateId][1] ?: 0) . "</td>";
+                    echo "<td id='$stateId-per-hrc'><input type='textbox' id='hrc-per-$stateId' class='hrc-per' value='0' /></td>";
+                    echo "<td id='$stateId-per-bs'><input type='textbox' id='bs-per-$stateId' class='bs-per' value='0' /></td>";
+                    echo "<td class='hrc-dels' id='$stateId-del-hrc'>0</td>";
+                    echo "<td class='bs-dels' id='$stateId-del-bs'>0</td>";
                     echo "</tr>\n";
                 }
             }

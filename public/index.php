@@ -278,9 +278,11 @@ $byStateResults = $db->get('candidate_state_results');
     <h1>YES!</h1>
     <h4>The numbers behind Bernie Sanders nomination</h4>
     <h6>Source: http://www.thegreenpapers.com</h6>
+        <h5><a href="path.php">See State Delegate Breakdown</a></h5>
     </div>
+
     <div class="col-lg-12 center" style="padding-bottom:10px; border-bottom:1px solid black; font-size:16px; font-weight:bold;">
-        <h5>End Results</h5>
+        <h5>Predictions For End Results, Based on Regional Performance to Date: </h5>
         <span class="col-lg-6"><p>Bernie Sanders :</p> (Predicted)
             <?php echo round($endTotal['Bernie'], 3) ?>
             + (Current)  <?php echo $bsTotals['sum(v.pledged)']; ?>
