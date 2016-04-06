@@ -345,7 +345,7 @@ $byStateResults = $db->get('candidate_state_results');
                 echo "<td>".$total."</td>";
                 echo "</tr>\n";
                 echo "<tr>\n";
-                echo "<td>Sanders, Benard \"Bernie\"</td>";
+                echo "<td>Sanders, Bernard \"Bernie\"</td>";
                 echo "<td>Pledged (Voted) Delegates</td>";
                 $total = 0;
                 for($i=0; $i<6; $i++) {
