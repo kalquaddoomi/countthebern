@@ -32,7 +32,7 @@ foreach($byStateResultsDetails as $details) {
     $byStateResults['avail'][$name] = array($details['votes'], $details['pledged']);
 }
 $db->where(1);
-$db->orderBy('primary_date', 'desc');
+$db->orderBy('primary_date', 'asc');
 $byStateResults['all'] = $db->get('states');
 ?>
 <html>
