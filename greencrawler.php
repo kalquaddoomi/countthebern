@@ -79,9 +79,7 @@ foreach($outCandidates as $state=>$theCandidates) {
     $db->where('state_abbr', $state);
     $currState = $db->getOne('states');
 
-    if($state == 'DA') {
-        $electDataes[$state] = '2016-03-21';
-    }
+
     $stateElectInfo = explode(" ", $electType[$state]);
     $sitem = $stateTotals[$state];
     $stateMake = array(
@@ -92,7 +90,7 @@ foreach($outCandidates as $state=>$theCandidates) {
         'total_delegates'=>(is_numeric($sitem[3]) ? $sitem[3] : 0),
         'election_type'=>$stateElectInfo[1],
         'election_eligible'=>$stateElectInfo[0],
-        'primary_date'=>$electDates[$state],
+        'primary_date'=>($state == "DA" ? '2016-03-21' : $electDates[$state]),
         'statename'=>$us_states[$state],
         'vote_count_Type'=>$voteType[$state]
 

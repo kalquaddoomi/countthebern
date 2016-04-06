@@ -51,16 +51,19 @@ $byStateResults['all'] = $db->get('states');
     <script type="text/javascript" src="./dist/fusioncharts/js/themes/fusioncharts.theme.fint.js"></script>
 </head>
 <body>
+    <h4><a href="index.php">Back to Dashboard</a></h4>
     <div class="col-lg-12">
-        <h5>Calculated Results</h5>
+        <a name="chartview"></a>
+        <h5>Results (change <a href="#predictions">PREDICTIONS</a> to alter)</h5>
         <div id="chart-delegates-hrc">LED gauges will load here!</div>
         <div id="chart-delegates-bs">LED gauges will load here!</div>
     </div>
     <div class="col-lg-12">
         <button type="button" id="bernieup">Bernie Up!</button>
     </div>
-    <h4>How we got to where we are</h4>
+
     <div class="col-lg-12">
+        <h4>How we got to where we are</h4>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -68,6 +71,7 @@ $byStateResults['all'] = $db->get('states');
                 <th></th>
                 <th></th>
                 <th colspan="2">Percentage</th>
+                <th colspan="2">Popular Vote</th>
                 <th colspan="2">Delegates</th>
 
             </tr>
@@ -85,7 +89,7 @@ $byStateResults['all'] = $db->get('states');
             <tbody>
             <?php foreach($byStateResults['all'] as $stateCheck) {
                 $stateId = $stateCheck['state_abbr'];
-                if(!isset($byStateResults['avail'][$stateId][1]) || $byStateResults['avail'][$stateId][1] <= 0) {
+                if(!isset($byStateResults['avail'][$stateId][1]) || $byStateResults['avail'][$stateId][1] <= 0 || $byStateResults['hrc'][$stateId][1] > 0 || $byStateResults['hrc'][$stateId][1] > 0) {
                     echo "<tr>\n";
                     echo "<td>" . $stateId . "</td>";
                     echo "<td>" . $stateCheck['primary_date'] . "</td>";
@@ -115,8 +119,10 @@ $byStateResults['all'] = $db->get('states');
             </tbody>
         </table>
     </div>
-    <h3>And Predicting the Future</h3>
+
     <div class="col-lg-12">
+        <a name="predictions"></a>
+        <h3>And Predicting the Future <a style="margin-left:50px;font-size:14px;" href="#chartview">Back to Graph</a></h3>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -165,6 +171,7 @@ $byStateResults['all'] = $db->get('states');
             </tbody>
         </table>
     </div>
+
     <script type="application/javascript">
         var orgHrc  = <?php echo $totalHRC ?>;
         var orgBs = <?php echo $totalBS ?>;

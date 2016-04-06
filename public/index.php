@@ -282,7 +282,7 @@ $byStateResults = $db->get('candidate_state_results');
     </div>
 
     <div class="col-lg-12 center" style="padding-bottom:10px; border-bottom:1px solid black; font-size:16px; font-weight:bold;">
-        <h5>Predictions For End Results, Based on Regional Performance to Date: </h5>
+        <h5>Predictions For End Results, Based on Regional Performance to Date (2383 Required to Win): </h5>
         <span class="col-lg-6"><p>Bernie Sanders :</p> (Predicted)
             <?php echo round($endTotal['Bernie'], 3) ?>
             + (Current)  <?php echo $bsTotals['sum(v.pledged)']; ?>
@@ -330,20 +330,11 @@ $byStateResults = $db->get('candidate_state_results');
                 <th>Modified</th>
                 <th>Closed</th>
                 <th>Total</th>
+                <th>Short</th>
             </tr>
             </thead>
             <tbody>
             <?php
-                echo "<tr>\n";
-                echo "<td>Clinton, Hillary Rodham</td>";
-                echo "<td>Pledged (Voted) Delegates</td>";
-                $total = 0;
-                for($i=0; $i<6; $i++) {
-                    $total += $hrc[$i]['sum(v.pledged)'];
-                    echo "<td>".$hrc[$i]['sum(v.pledged)']."</td>";
-                }
-                echo "<td>".$total."</td>";
-                echo "</tr>\n";
                 echo "<tr>\n";
                 echo "<td>Sanders, Bernard \"Bernie\"</td>";
                 echo "<td>Pledged (Voted) Delegates</td>";
@@ -353,7 +344,20 @@ $byStateResults = $db->get('candidate_state_results');
                     echo "<td>".$bs[$i]['sum(v.pledged)']."</td>";
                 }
                 echo "<td>".$total."</td>";
+                echo "<td>".(2383 - $total)."</td>";
                 echo "</tr>\n";
+                echo "<tr>\n";
+                echo "<td>Clinton, Hillary Rodham</td>";
+                echo "<td>Pledged (Voted) Delegates</td>";
+                $total = 0;
+                for($i=0; $i<6; $i++) {
+                    $total += $hrc[$i]['sum(v.pledged)'];
+                    echo "<td>".$hrc[$i]['sum(v.pledged)']."</td>";
+                }
+                echo "<td>".$total."</td>";
+                echo "<td>".(2383 - $total)."</td>";
+                echo "</tr>\n";
+
                 echo "<tr>\n";
                 echo "<td>Remaining</td>";
                 echo "<td>Pledged (Voted) Delegates</td>";
@@ -363,6 +367,7 @@ $byStateResults = $db->get('candidate_state_results');
                             echo "<td>".$av[$i]['sum(v.pledged)']."</td>";
                         }
                 echo "<td>".$total."</td>";
+                echo "<td></td>";
                 echo "</tr>\n";
             ?>
             </tbody>
@@ -387,30 +392,6 @@ $byStateResults = $db->get('candidate_state_results');
             </thead>
             <tbody>
                 <tr>
-                    <td>Clinton, Hillary Rodham</td>
-                    <td>States Won</td>
-                    <?php
-                        $total = 0;
-                        for($i=0; $i<5; $i++) {
-                            echo "<td>".$rwins[$i][1]."</td>";
-                            $total += $rwins[$i][1];
-                        }
-                        echo "<td>".$total."</td>";
-                    ?>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Pledged Delegates</td>
-                    <?php
-                    $total = 0;
-                    for($i=0; $i<5; $i++) {
-                        $total += $hrcr[$i]['sum(v.pledged)'];
-                        echo "<td>".$hrcr[$i]['sum(v.pledged)']."</td>";
-                    }
-                    echo "<td>".$total."</td>";
-                    ?>
-                </tr>
-                <tr>
                     <td>Sanders, Bernard "Bernie"</td>
                     <td>States Won</td>
                     <?php
@@ -434,6 +415,31 @@ $byStateResults = $db->get('candidate_state_results');
                     echo "<td>".$total."</td>";
                     ?>
                 </tr>
+                <tr>
+                    <td>Clinton, Hillary Rodham</td>
+                    <td>States Won</td>
+                    <?php
+                        $total = 0;
+                        for($i=0; $i<5; $i++) {
+                            echo "<td>".$rwins[$i][1]."</td>";
+                            $total += $rwins[$i][1];
+                        }
+                        echo "<td>".$total."</td>";
+                    ?>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Pledged Delegates</td>
+                    <?php
+                    $total = 0;
+                    for($i=0; $i<5; $i++) {
+                        $total += $hrcr[$i]['sum(v.pledged)'];
+                        echo "<td>".$hrcr[$i]['sum(v.pledged)']."</td>";
+                    }
+                    echo "<td>".$total."</td>";
+                    ?>
+                </tr>
+
                 <tr>
                     <td>Remaining</td>
                     <td>States</td>
