@@ -58,9 +58,7 @@ $byStateResults['all'] = $db->get('states');
         <div id="chart-delegates-hrc">LED gauges will load here!</div>
         <div id="chart-delegates-bs">LED gauges will load here!</div>
     </div>
-    <div class="col-lg-12">
-        <button type="button" id="bernieup">Bernie Up!</button>
-    </div>
+
 
     <div class="col-lg-12">
         <h4>How we got to where we are</h4>
@@ -70,9 +68,11 @@ $byStateResults['all'] = $db->get('states');
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th colspan="2">Percentage</th>
                 <th colspan="2">Popular Vote</th>
                 <th colspan="2">Delegates</th>
+                <th colspan="2">Bernie Bump</th>
 
             </tr>
             <tr>
@@ -84,13 +84,19 @@ $byStateResults['all'] = $db->get('states');
                 <th>Sanders</th>
                 <th>Clinton</th>
                 <th>Sanders</th>
-                <th>Bernie Bump</th>
+                <th>Clinton</th>
+                <th>Sanders</th>
+                <th>Delegate Diff</th>
             </tr>
             </thead>
             <tbody>
-            <?php foreach($byStateResults['all'] as $stateCheck) {
+
+            <?php
+            $validCount = 0;
+            foreach($byStateResults['all'] as $stateCheck) {
                 $stateId = $stateCheck['state_abbr'];
                 if(!isset($byStateResults['avail'][$stateId][1]) || $byStateResults['avail'][$stateId][1] <= 0 || $byStateResults['hrc'][$stateId][1] > 0 || $byStateResults['hrc'][$stateId][1] > 0) {
+                    $validCount++;
                     echo "<tr>\n";
                     echo "<td>" . $stateId . "</td>";
                     echo "<td>" . $stateCheck['primary_date'] . "</td>";
@@ -98,15 +104,24 @@ $byStateResults['all'] = $db->get('states');
                     echo "<td>" . ($byStateResults['avail'][$stateId][1] ?: 0) . "</td>";
                     echo "<td>" . (round(($byStateResults['hrc'][$stateId][0] / $stateCheck['total_cast_votes']) * 100, 1))
                         . "</td>";
+                    $sumHRCPerc += (round(($byStateResults['hrc'][$stateId][0] / $stateCheck['total_cast_votes']) * 100, 1));
                     echo "<td>" . (round(($byStateResults['bs'][$stateId][0] / $stateCheck['total_cast_votes']) * 100, 1))
                         . "</td>";
+                    $sumBSPerc += (round(($byStateResults['bs'][$stateId][0] / $stateCheck['total_cast_votes']) * 100, 1));
+                    echo "<td>" . $byStateResults['hrc'][$stateId][0] . "</td>";
+                    echo "<td>" . $byStateResults['bs'][$stateId][0] . "</td>";
                     echo "<td>" . $byStateResults['hrc'][$stateId][1] . "</td>";
                     $lastDiff = $totalBS-$totalHRC;
+                    $lastDiffV = $totalVBS-$totalVHRC;
                     $totalHRC += $byStateResults['hrc'][$stateId][1];
+                    $totalVHRC += $byStateResults['hrc'][$stateId][0];
                     echo "<td>" . $byStateResults['bs'][$stateId][1] . "</td>";
                     $totalBS += $byStateResults['bs'][$stateId][1];
+                    $totalVBS += $byStateResults['bs'][$stateId][0];
                     $newDiff = $totalBS-$totalHRC;
+                    $newDiffV = $totalVBS-$totalVHRC;
                     $gainLoss= $newDiff-$lastDiff;
+                    $gainLossV= $newDiffV-$lastDiffV;
                     if($gainLoss > 0) {
                         $glColor = 'black';
                         $gainLoss = '+'.$gainLoss;
@@ -117,7 +132,23 @@ $byStateResults['all'] = $db->get('states');
                     echo "</tr>\n";
                 }
             }
+
+            echo "<tr style='font-weight:bold;'>";
+            echo "<td>TOTALS</td>";
+            echo "<td>".date('Y-m-d')."</td>";
+            echo "<td></td>";
+            echo "<td>0</td>";
+            echo "<td>".round($sumHRCPerc / $validCount, 1)."</td>";
+            echo "<td>".round($sumBSPerc / $validCount, 1)."</td>";
+            echo "<td>".number_format($totalVHRC)."</td>";
+            echo "<td>".number_format($totalVBS)."</td>";
+            echo "<td>".number_format($totalHRC)."</td>";
+            echo "<td>".number_format($totalBS)."</td>";
+            echo "<td></td>";
+            echo "</tr>";
+
             ?>
+
             </tbody>
         </table>
     </div>
@@ -131,6 +162,7 @@ $byStateResults['all'] = $db->get('states');
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th colspan="2">Percentage</th>
                 <th colspan="2">Delegates</th>
             </tr>
@@ -145,6 +177,7 @@ $byStateResults['all'] = $db->get('states');
                 <th>Sanders</th>
             </tr>
             <tr>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
