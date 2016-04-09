@@ -78,6 +78,7 @@ $byStateResults['all'] = $db->get('states');
             <tr>
                 <th>State</th>
                 <th>Election</th>
+                <th>Election Format</th>
                 <th>Delegates Left</th>
                 <th>Clinton</th>
                 <th>Sanders</th>
@@ -93,6 +94,7 @@ $byStateResults['all'] = $db->get('states');
                     echo "<tr>\n";
                     echo "<td>" . $stateId . "</td>";
                     echo "<td>" . $stateCheck['primary_date'] . "</td>";
+                    echo "<td>" . $stateCheck['election_eligible'] . " " . $stateCheck['election_type']  . "</td>";
                     echo "<td>" . ($byStateResults['avail'][$stateId][1] ?: 0) . "</td>";
                     echo "<td>" . (round(($byStateResults['hrc'][$stateId][0] / $stateCheck['total_cast_votes']) * 100, 1))
                         . "</td>";
@@ -135,6 +137,7 @@ $byStateResults['all'] = $db->get('states');
             <tr>
                 <th>State</th>
                 <th>Election</th>
+                <th>Election Format</th>
                 <th>Delegates Left</th>
                 <th>Clinton</th>
                 <th>Sanders</th>
@@ -159,6 +162,7 @@ $byStateResults['all'] = $db->get('states');
                     echo "<tr>\n";
                     echo "<td>" . $stateId . "</td>";
                     echo "<td>" . $stateCheck['primary_date'] . "</td>";
+                    echo "<td>" . $stateCheck['election_eligible'] . " " . $stateCheck['election_type']  . "</td>";
                     echo "<td id='$stateId-avail'>" . ($byStateResults['avail'][$stateId][1] ?: 0) . "</td>";
                     echo "<td id='$stateId-per-hrc'><input type='textbox' id='hrc-per-$stateId' class='hrc-per' value='0' /></td>";
                     echo "<td id='$stateId-per-bs'><input type='textbox' id='bs-per-$stateId' class='bs-per' value='0' /></td>";
