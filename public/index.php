@@ -86,6 +86,7 @@ foreach($electType as $eT) {
     }
 }
 
+
 $rCounter = 0;
 $endTotal = array("Bernie"=>0, "Hill"=>0);
 foreach($regions as $r) {
@@ -104,6 +105,59 @@ foreach($regions as $r) {
     $endTotal['Hill'] += $remain * $hillShare;
     $rCounter++;
 }
+
+foreach($electType as $eT) {
+    $hrcf[] = getData(1, null, $eT);
+    $bsf[] = getData(2, null, $eT);
+    $avf[] = getData(6, null, $eT);
+}
+
+$rfCounter = 0;
+$fendTotal = array("Bernie"=>0, "Hill"=>0);
+foreach($electType as $electFormat) {
+    $hillf = $hrcf[$rfCounter]['sum(v.pledged)'];
+    $bernief = $bsf[$rfCounter]['sum(v.pledged)'];
+    $totalf = $hillf+$bernief;
+    $hillSharef = $hillf / $totalf;
+    $bernieSharef = $bernief / $totalf;
+    $remainf = $avf[$rfCounter]['sum(v.pledged)'];
+    $predictf[$electFormat]['BernShare'] = $bernieSharef;
+    $predictf[$electFormat]['HillShare'] = $hillSharef;
+    $predictf[$electFormat]['available'] = $remainf;
+    $predictf[$electFormat]['Bernie'] = $remainf * $bernieSharef;
+    $predictf[$electFormat]['Hill'] = $remainf * $hillSharef;
+    $fendTotal['Bernie'] += $remainf * $bernieSharef;
+    $fendTotal['Hill'] += $remainf * $hillSharef;
+    $rfCounter++;
+}
+
+$rfendTotal = array("Bernie"=>0, "Hill"=>0);
+foreach($regions as $r) {
+    foreach($electType as $et) {
+        $hrcrf[$r][$et] = getData(1, null, $et, $r);
+        $bsrf[$r][$et] = getData(2, null, $et, $r);
+        $avrf[$r][$et] = getData(6, null, $et, $r);
+        $hillrf = $hrcrf[$r][$et]['sum(v.pledged)'];
+        $bernierf = $bsrf[$r][$et]['sum(v.pledged)'];
+        $totalrf = $hillrf+$bernierf;
+        if($totalrf == 0) $totalrf = 1;
+        $hillSharerf = $hillrf / $totalrf;
+        $bernieSharerf = $bernierf / $totalrf;
+        $remainrf = $avrf[$r][$et]['sum(v.pledged)'];
+        $predictrf[$r][$et]['BernShare'] = $bernieSharerf;
+        $predictrf[$r][$et]['HillShare'] = $hillSharerf;
+        $predictrf[$r][$et]['available'] = $remainrf;
+        $predictrf[$r][$et]['Bernie'] = $remainrf * $bernieSharerf;
+        $predictrf[$r][$et]['Hill'] = $remainrf * $hillSharerf;
+        $rfendTotal['Bernie'] += $remainrf * $bernieSharerf;
+        $rfendTotal['Hill'] += $remainrf * $hillSharerf;
+    }
+}
+
+
+
+
+
 
 $db->where('candidate_id', 1);
 $db->orWhere('candidate_id', 2);
@@ -472,6 +526,7 @@ $byStateResults = $db->get('candidate_state_results');
         </table>
 
     </div>
+
         <div class="col-lg-12">
             <table class="table table-striped table-bordered">
                 <thead>
@@ -484,11 +539,12 @@ $byStateResults = $db->get('candidate_state_results');
                 <tr>
                     <th>Candidate</th>
                     <?php foreach($regions as $reg) {
-                        echo "<th>Left</th>";
-                        echo "<th>Average Win %</th>";
-                        echo "<th>Predict To Win</th>";
-
-                    } ?>
+                            echo "<th>Left</th>";
+                            echo "<th>Average Win %</th>";
+                            echo "<th>Predict To Win</th>";
+                        }
+                    echo "<th>Final Count</th>";
+                    ?>
                 </tr>
                 </thead>
                 <tbody>
@@ -499,6 +555,7 @@ $byStateResults = $db->get('candidate_state_results');
                         echo "<td>".round($predict[$reg]['BernShare'], 4)."</td>";
                         echo "<td>".round($predict[$reg]['Bernie'], 3)."</td>";
                     }?>
+                    <td><?php echo $endTotal['Bernie'] ?></td>
                 </tr>
                 <tr>
                     <td>Clinton, Hillary Rodham</td>
@@ -507,6 +564,120 @@ $byStateResults = $db->get('candidate_state_results');
                         echo "<td>".round($predict[$reg]['HillShare'], 4)."</td>";
                         echo "<td>".round($predict[$reg]['Hill'], 3)."</td>";
                     }?>
+                    <td><?php echo $endTotal['Hill'] ?></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="col-lg-12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th></th>
+                    <?php foreach($electType as $et) {
+                        echo "<th colspan=3>$et</th>";
+                    } ?>
+                </tr>
+                <tr>
+                    <th>Candidate</th>
+                    <?php foreach($electType as $et) {
+                        echo "<th>Left</th>";
+                        echo "<th>Average Win %</th>";
+                        echo "<th>Predict To Win</th>";
+                    }
+                    echo "<th>Final</th>";
+                    ?>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Sanders, Bernard "Bernie"</td>
+                    <?php foreach($electType as $et) {
+                            echo "<td>".$predictf[$et]['available']."</td>";
+                            echo "<td>".round($predictf[$et]['BernShare'], 4)."</td>";
+                            echo "<td>".round($predictf[$et]['Bernie'], 3)."</td>";
+                        }
+                    ?>
+                    <td><?php echo $fendTotal['Bernie'] ?></td>
+                </tr>
+                <tr>
+                    <td>Clinton, Hillary Rodham</td>
+                    <?php foreach($electType as $et) {
+                            echo "<td>".$predictf[$et]['available']."</td>";
+                            echo "<td>".round($predictf[$et]['HillShare'], 4)."</td>";
+                            echo "<td>".round($predictf[$et]['Hill'], 3)."</td>";
+                        }
+                    ?>
+                    <td><?php echo $fendTotal['Hill'] ?></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="col-lg-12">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th></th>
+                    <?php
+                        foreach($regions as $r) {
+                            echo "<th colspan=6>$r</th>";
+                        }
+                    ?>
+                </tr>
+                <tr>
+                    <th></th>
+                    <?php
+                        foreach($regions as $r) {
+                            foreach ($electType as $et) {
+                                echo "<th colspan=3>$et</th>";
+                            }
+                        }
+                    ?>
+                </tr>
+                <tr>
+                    <th>Candidate</th>
+                    <?php
+                    foreach($regions as $r) {
+                        foreach ($electType as $et) {
+                            echo "<th>Left</th>";
+                            echo "<th>Average Win %</th>";
+                            echo "<th>Predict To Win</th>";
+                        }
+                    }
+                    echo "<th>Final</th>";
+                    ?>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Sanders, Bernard "Bernie"</td>
+                    <?php
+                    foreach($regions as $r) {
+                        foreach ($electType as $et) {
+                            echo "<td>" . $predictrf[$r][$et]['available'] . "</td>";
+                            echo "<td>" . round($predictrf[$r][$et]['BernShare'], 4) . "</td>";
+                            echo "<td>" . round($predictrf[$r][$et]['Bernie'], 3) . "</td>";
+                        }
+                    }
+                    ?>
+                    <td><?php echo $fendTotal['Bernie'] ?></td>
+                </tr>
+                <tr>
+                    <td>Clinton, Hillary Rodham</td>
+                    <?php
+                    foreach($regions as $r) {
+                        foreach ($electType as $et) {
+                            echo "<td>" . $predictrf[$r][$et]['available'] . "</td>";
+                            echo "<td>" . round($predictrf[$r][$et]['HillShare'], 4) . "</td>";
+                            echo "<td>" . round($predictrf[$r][$et]['Hill'], 3) . "</td>";
+                        }
+                    }
+                    ?>
+                    <td><?php echo $fendTotal['Hill'] ?></td>
                 </tr>
                 </tbody>
             </table>
