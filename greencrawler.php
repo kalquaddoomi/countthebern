@@ -6,10 +6,9 @@
  * Time: 10:28 AM
  */
 
-$path = getcwd();
-
-include "$path/states.php";
-require "$path/vendor/autoload.php";
+chdir(dirname(__FILE__));
+include "states.php";
+require "./vendor/autoload.php";
 error_reporting(E_ERROR);
 
 $db = new MysqliDb('localhost', "a", "a", 'countthebern');
