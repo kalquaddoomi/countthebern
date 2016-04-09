@@ -526,8 +526,11 @@ $byStateResults = $db->get('candidate_state_results');
         </table>
 
     </div>
-
+        <div class="col-lg-11 col-lg-offset-1">
+            <h3>Predictions By Various Factors (Based on current Delegate Wins)</h3>
+        </div>
         <div class="col-lg-12">
+            <h4>Predictions By Region</h4>
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
@@ -572,6 +575,7 @@ $byStateResults = $db->get('candidate_state_results');
         </div>
 
         <div class="col-lg-12">
+            <h4>Predictions By Election Format</h4>
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
@@ -618,6 +622,7 @@ $byStateResults = $db->get('candidate_state_results');
         </div>
 
         <div class="col-lg-12">
+            <h4>Predictions By Region, By Election Format</h4>
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
