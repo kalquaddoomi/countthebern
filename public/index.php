@@ -664,7 +664,7 @@ $byStateResults = $db->get('candidate_state_results');
                         }
                     }
                     ?>
-                    <td><?php echo $fendTotal['Bernie'] ?></td>
+                    <td><?php echo $rfendTotal['Bernie'] ?></td>
                 </tr>
                 <tr>
                     <td>Clinton, Hillary Rodham</td>
@@ -677,7 +677,7 @@ $byStateResults = $db->get('candidate_state_results');
                         }
                     }
                     ?>
-                    <td><?php echo $fendTotal['Hill'] ?></td>
+                    <td><?php echo $rfendTotal['Hill'] ?></td>
                 </tr>
                 </tbody>
             </table>
