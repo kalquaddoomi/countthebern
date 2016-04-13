@@ -346,8 +346,31 @@ $byStateResults = $db->get('candidate_state_results');
             + (Current) <?php echo $hrcTotals['sum(v.pledged)']; ?>
             = <?php echo (round($endTotal['Hill'], 3)+$hrcTotals['sum(v.pledged)']); ?> </span>
     </div>
-    <div class="main col-lg-12">
 
+    <div class="col-lg-12 center" style="padding-bottom:10px; border-bottom:1px solid black; font-size:16px; font-weight:bold;">
+            <h5>Predictions For End Results, Based on Election Format Performance to Date (2383 Required to Win): </h5>
+        <span class="col-lg-6"><p>Bernie Sanders :</p> (Predicted)
+            <?php echo round($fendTotal['Bernie'], 3) ?>
+            + (Current)  <?php echo $bsTotals['sum(v.pledged)']; ?>
+            = <?php echo (round($fendTotal['Bernie'], 3)+$bsTotals['sum(v.pledged)']); ?></span>
+        <span class="col-lg-6"><p>Hillary Clinton :</p> (Predicted)
+            <?php echo round($fendTotal['Hill'], 3) ?>
+            + (Current) <?php echo $hrcTotals['sum(v.pledged)']; ?>
+            = <?php echo (round($fendTotal['Hill'], 3)+$hrcTotals['sum(v.pledged)']); ?> </span>
+    </div>
+
+    <div class="col-lg-12 center" style="padding-bottom:10px; border-bottom:1px solid black; font-size:16px; font-weight:bold;">
+            <h5>Predictions For End Results, Based on Combined Regional and Election Format Performance to Date (2383 Required to Win): </h5>
+        <span class="col-lg-6"><p>Bernie Sanders :</p> (Predicted)
+            <?php echo round($rfendTotal['Bernie'], 3) ?>
+            + (Current)  <?php echo $bsTotals['sum(v.pledged)']; ?>
+            = <?php echo (round($rfendTotal['Bernie'], 3)+$bsTotals['sum(v.pledged)']); ?></span>
+        <span class="col-lg-6"><p>Hillary Clinton :</p> (Predicted)
+            <?php echo round($rfendTotal['Hill'], 3) ?>
+            + (Current) <?php echo $hrcTotals['sum(v.pledged)']; ?>
+            = <?php echo (round($rfendTotal['Hill'], 3)+$hrcTotals['sum(v.pledged)']); ?> </span>
+    </div>
+    <div class="main col-lg-12">
     <div class="col-lg-4">
         <div id="chart-delegates-container">An angular gauge will load here!</div>
     <p>A total of <?php echo $pledged_to_date ?> delegates have been selected from <?php echo $total_delegates ?>, leaving <?php echo $total_delegates - $pledged_to_date ?> to go.</p>
@@ -359,7 +382,7 @@ $byStateResults = $db->get('candidate_state_results');
     <div class="col-lg-4">
         <div id="chart-race-container">A column2d chart will load here!</div>
         <p class="big-notice">
-        The Nomination Process is just getting warmed up!
+        The Nomination Process is in the thick, nearly half the delegates still need to be awarded!
     </p>
     </div>
 
