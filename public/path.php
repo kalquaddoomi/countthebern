@@ -49,19 +49,22 @@ $byStateResults['all'] = $db->get('states');
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script type="text/javascript" src="./dist/fusioncharts/js/fusioncharts.js"></script>
     <script type="text/javascript" src="./dist/fusioncharts/js/themes/fusioncharts.theme.fint.js"></script>
+    <link rel="stylesheet" href="dist/css/path.css"
 </head>
 <body>
-    <h4><a href="index.php">Back to Dashboard</a></h4>
-    <div class="col-lg-12">
-        <a name="chartview"></a>
-        <h5>Results (change <a href="#predictions">PREDICTIONS</a> to alter)</h5>
-        <div id="chart-delegates-hrc">LED gauges will load here!</div>
-        <div id="chart-delegates-bs">LED gauges will load here!</div>
+    <div id="scrolling-nav">
+        <h4><a href="index.php">Back to Dashboard</a></h4>
+        <div class="col-lg-12">
+            <a name="chartview"></a>
+            <h5>Results (change <a id='predictions' href="#">PREDICTIONS</a> to alter)</h5>
+            <div id="chart-delegates-hrc">LED gauges will load here!</div>
+            <div id="chart-delegates-bs">LED gauges will load here!</div>
+        </div>
     </div>
 
-
+<div class="col-lg-12" id="data-container">
     <div class="col-lg-12">
-        <h4>How we got to where we are</h4>
+        <h3>How we got to where we are</h3>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -152,10 +155,8 @@ $byStateResults['all'] = $db->get('states');
             </tbody>
         </table>
     </div>
-
     <div class="col-lg-12">
-        <a name="predictions"></a>
-        <h3>And Predicting the Future <a style="margin-left:50px;font-size:14px;" href="#chartview">Back to Graph</a></h3>
+        <h3 id="predict-view">And Predicting the Future </h3>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -208,8 +209,15 @@ $byStateResults['all'] = $db->get('states');
             </tbody>
         </table>
     </div>
-
+</div>
     <script type="application/javascript">
+
+        $("#predictions").click(function() {
+            $('html, body').animate({
+                scrollTop: $("#predict-view").offset().top - 280
+            }, 1000);
+        });
+
         var orgHrc  = <?php echo $totalHRC ?>;
         var orgBs = <?php echo $totalBS ?>;
         var delegatesHRCFuel = {
@@ -277,7 +285,7 @@ $byStateResults['all'] = $db->get('states');
         var delsHRCFuel = new FusionCharts({
             "type": "hled",
             "renderAt": "chart-delegates-hrc",
-            "width": "1000",
+            "width": "100%",
             "height": "100",
             "dataFormat": "json",
             "dataSource":delegatesHRCFuel
@@ -285,7 +293,7 @@ $byStateResults['all'] = $db->get('states');
         var delsBSFuel = new FusionCharts({
             "type": "hled",
             "renderAt": "chart-delegates-bs",
-            "width": "1000",
+            "width": "100%",
             "height": "100",
             "dataFormat": "json",
             "dataSource":delegatesBSFuel

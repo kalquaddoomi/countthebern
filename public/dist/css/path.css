@@ -1,0 +1,34 @@
+#scrolling-nav {
+    position: fixed;
+    background-color:#ffffff;
+    display:block;
+    width:100%;
+    border:1px solid black;
+    padding-bottom:10px;
+    padding-left:50px;
+    z-index:10;
+}
+
+#scrolling-nav h4 {
+    font-size: 12px;
+    line-height:12px;
+    height:14px;
+    padding: 1px;
+    margin: 1px;
+}
+
+#scrolling-nav h5 {
+    font-size: 12px;
+    line-height:12px;
+    height:14px;
+    padding: 1px;
+    margin: 1px;
+}
+
+#data-container {
+    margin-top:280px;
+    overflow:auto;
+    width:100%;
+    z-index:5;
+}
+
