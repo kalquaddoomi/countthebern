@@ -97,11 +97,11 @@ foreach($outCandidates as $state=>$theCandidates) {
 
     );
     if($currState['id']) {
-     //   echo "Updating existing state: ".$currState['id']."\n";
+        echo "Updating existing state: ".$currState['id']."\n";
         $db->where('id', $currState['id']);
         $db->update('states', $stateMake);
     } else {
-     //   echo "Inserting new State\n";
+        echo "Inserting new State\n";
         $currState = $db->insert('states', $stateMake);
     }
     foreach($theCandidates as $candidateName=>$item) {
