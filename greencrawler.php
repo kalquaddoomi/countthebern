@@ -19,7 +19,7 @@ foreach($us_states as $stateAb => $stateName) {
     $db->where('state_abbr', $state);
     $checkState = $db->getOne('states');
 
-    $greenCrawl = "http://www.thegreenpapers.com/P16/$stateAb-D";
+    $greenCrawl = "http://www.thegreenpapers.com/P20/$stateAb-D";
     $greenDom = \Sunra\PhpSimple\HtmlDomParser::file_get_html($greenCrawl);
     echo "Reading State: " . $stateName . "\n";
     $when = $greenDom->getElementById("evtmaj");
